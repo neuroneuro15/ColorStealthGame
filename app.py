@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from random import randint
+from random import randint, choice
 import itertools
 import cfg
 
@@ -20,6 +20,14 @@ class Tile:
         self.color.g = randint(0, 255)
         self.color.b = randint(0, 255)
 
+    def randomize_color_from_theme(self, theme):
+        r, g, b = choice(theme)  # choose a color from the theme
+        self.color.r, self.color.g, self.color.b = r, g, b
+
+    @classmethod
+    def from_theme(cls, x, y, px, py, theme):
+        r, g, b = choice(theme)  # choose a color from the theme
+        return cls(x, y, px, py, r, g, b)
 
 class Player:
 
@@ -35,7 +43,8 @@ class Player:
 
 class Game:
 
-    def __init__(self, width, height):
+    def __init__(self, width, height, theme):
+        self.theme = theme
 
         self.screen = pygame.display.set_mode(cfg.screen_resolution)
         self.screen.fill((100, 0, 0))
@@ -53,7 +62,7 @@ class Game:
         if (0 <= x < self.width) and (0 <= y < self.height):
             player.x, player.y = x, y
             new_tile = self.board[y][x]
-            new_tile.randomize_color()
+            new_tile.randomize_color_from_theme(self.theme)
             self.check_for_win(player)
 
     def check_for_win(self, player_moving):
@@ -69,7 +78,7 @@ class Game:
     def generate_board(self):
         px = self.screen.get_width() // self.width
         py = self.screen.get_height() // self.height
-        return [[Tile(x, y, px, py, randint(0, 255), randint(0, 255), randint(0, 255),) for x in range(self.width)] for y in range(self.height)]
+        return [[Tile.from_theme(x, y, px, py, self.theme) for x in range(self.width)] for y in range(self.height)]
 
     def handle_keys(self, dt, event):
         movement_inputs = {
@@ -105,7 +114,8 @@ class Game:
 
 if __name__ == '__main__':
 
-    game = Game(width=cfg.board_size, height=cfg.board_size)
+    theme = cfg.themes[0]
+    game = Game(width=cfg.board_size, height=cfg.board_size, theme=theme)
     game.run()
 
 
