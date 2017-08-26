@@ -38,15 +38,15 @@ def blast_board(board):
         pygame.draw.rect(screen, color, tile)
 
 
-keyboard_actions = {
-    pygame.K_UP: (move_player, (board, player_2, 0, -1)),
-    pygame.K_DOWN: (move_player, (board, player_2, 0, 1)),
-    pygame.K_LEFT: (move_player, (board, player_2, -1, 0)),
-    pygame.K_RIGHT: (move_player, (board, player_2, 1, 0)),
-    pygame.K_w: (move_player, (board, player_1, 0, -1)),
-    pygame.K_s: (move_player, (board, player_1, 0, 1)),
-    pygame.K_a: (move_player, (board, player_1, -1, 0)),
-    pygame.K_d: (move_player, (board, player_1, 1, 0)),
+movement_inputs = {
+    pygame.K_UP: (player_2, 0, -1)),
+    pygame.K_DOWN: (player_2, 0, 1)),
+    pygame.K_LEFT: (player_2, -1, 0)),
+    pygame.K_RIGHT: (player_2, 1, 0)),
+    pygame.K_w: (player_1, 0, -1)),
+    pygame.K_s: (player_1, 0, 1)),
+    pygame.K_a: (player_1, -1, 0)),
+    pygame.K_d: (player_1, 1, 0)),
 }
 
 
@@ -65,11 +65,9 @@ if __name__ == '__main__':
                             done = True
                     if event.type == pygame.KEYDOWN:
                         pressed = pygame.key.get_pressed()
-                        for key, (fun, args) in keyboard_actions.items():
+                        for key, (player, x, y) in movement_inputs.items():
                             if pressed[key]:
-                                fun(*args)
-
-
+                                move_player(board, player, x, y)
 
             for ai in ai_players:
                 move_player(board, ai, randint(-1, 1), randint(-1, 1))
