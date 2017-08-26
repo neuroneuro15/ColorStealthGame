@@ -3,6 +3,8 @@ from pygame.locals import *
 from random import randint, choice
 import itertools
 import cfg
+from colorsys import hls_to_rgb, rgb_to_hls
+
 
 
 class Tile:
@@ -97,10 +99,14 @@ class Game:
             for player in self.players:
                 if player.x == tile.x and player.y == tile.y:
                     # if max(tile.color.r, tile.color.g, tile.color.b) < 255 - cfg.brighten_rate:
-                    if min(tile.color.r, tile.color.g, tile.color.b) > cfg.brighten_rate + 30:
-                        tile.color.r += cfg.brighten_rate
-                        tile.color.g += cfg.brighten_rate
-                        tile.color.b += cfg.brighten_rate
+
+                    h, l, s = rgb_to_hls(tile.color.r, tile.color.g, tile.color.b)
+                    if l > cfg.min_lightness:
+                        l += cfg.brighten_rate
+                        r, g, b = hls_to_rgb(h, l, s)
+                        tile.color.r = int(r)
+                        tile.color.g = int(g)
+                        tile.color.b = int(b)
             tile.draw(self.screen)
         pygame.display.flip()
 
