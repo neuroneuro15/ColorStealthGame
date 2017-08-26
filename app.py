@@ -83,8 +83,8 @@ class Game:
 
         player.x, player.y = x, y
         new_tile = self.board[y][x]
-        # new_tile.randomize_color_from_theme(self.theme)
-        new_tile.randomize_color()
+        new_tile.randomize_color_from_theme(self.theme)
+        # new_tile.randomize_color()
         self.check_for_win(player)
 
     def check_for_win(self, player_moving):
@@ -96,10 +96,11 @@ class Game:
         for tile in itertools.chain(*self.board):
             for player in self.players:
                 if player.x == tile.x and player.y == tile.y:
-                    if max(tile.color.r, tile.color.g, tile.color.b) < 255:
-                        tile.color.r += 1
-                        tile.color.g += 1
-                        tile.color.b += 1
+                    # if max(tile.color.r, tile.color.g, tile.color.b) < 255 - cfg.brighten_rate:
+                    if min(tile.color.r, tile.color.g, tile.color.b) > cfg.brighten_rate + 30:
+                        tile.color.r += cfg.brighten_rate
+                        tile.color.g += cfg.brighten_rate
+                        tile.color.b += cfg.brighten_rate
             tile.draw(self.screen)
         pygame.display.flip()
 
