@@ -1,26 +1,14 @@
 import pygame
-from pygame.locals import *
+from pygame import locals
 from random import randint
 import itertools
 import cfg
 
 
-screen = pygame.display.set_mode(cfg.screen_resolution)
-screen.fill((0, 0, 0))
-px = screen.get_width() // cfg.board_size
-py = screen.get_height() // cfg.board_size
-
-board = [[pygame.Rect(x * px, y * py, px, py) for x in range(cfg.board_size)] for y in range(cfg.board_size)]
-
 
 def make_player():
     return {'x': randint(0, cfg.board_size), 'y': randint(0, cfg.board_size)}
 
-
-
-ai_players = [make_player() for _ in range(cfg.ai_players)]
-player_1 = make_player()
-player_2 = make_player()
 
 def move_player(board, player, x, y):
     x_new, y_new = player['x'] + x, player['y'] + y
@@ -38,49 +26,54 @@ def blast_board(board):
         pygame.draw.rect(screen, color, tile)
 
 
+player_1 = make_player()
+player_2 = make_player()
+
 movement_inputs = {
-    pygame.K_UP: (player_2, 0, -1)),
-    pygame.K_DOWN: (player_2, 0, 1)),
-    pygame.K_LEFT: (player_2, -1, 0)),
-    pygame.K_RIGHT: (player_2, 1, 0)),
-    pygame.K_w: (player_1, 0, -1)),
-    pygame.K_s: (player_1, 0, 1)),
-    pygame.K_a: (player_1, -1, 0)),
-    pygame.K_d: (player_1, 1, 0)),
+    locals.K_UP: (player_2, 0, -1),
+    locals.K_DOWN: (player_2, 0, 1),
+    locals.K_LEFT: (player_2, -1, 0),
+    locals.K_RIGHT: (player_2, 1, 0),
+    locals.K_w: (player_1, 0, -1),
+    locals.K_s: (player_1, 0, 1),
+    locals.K_a: (player_1, -1, 0),
+    locals.K_d: (player_1, 1, 0),
 }
 
+def handle_keys(dt):
+    if event.key == locals.K_ESCAPE:
+        pygame.quit()
+    else:
+        pressed = pygame.key.get_pressed()
+        for key, (player, x, y) in movement_inputs.items():
+            if pressed[key]:
+                move_player(board, player, x, y)
+
+
+def update_game(dt):
+    for ai in ai_players:
+        move_player(board, ai, randint(-1, 1), randint(-1, 1))
 
 if __name__ == '__main__':
 
+    screen = pygame.display.set_mode(cfg.screen_resolution)
+    screen.fill((0, 0, 0))
+    px = screen.get_width() // cfg.board_size
+    py = screen.get_height() // cfg.board_size
+
+    board = [[pygame.Rect(x * px, y * py, px, py) for x in range(cfg.board_size)] for y in range(cfg.board_size)]
+
+    ai_players = [make_player() for _ in range(cfg.ai_players)]
+
+
     blast_board(board)
-
-    done = False
     clock = pygame.time.Clock()
-    while not done:
-            for event in pygame.event.get():
-                    if event.type == QUIT:
-                            done = True
-                    elif event.type == KEYDOWN:
-                        if event.key == K_ESCAPE:
-                            done = True
-                    if event.type == pygame.KEYDOWN:
-                        pressed = pygame.key.get_pressed()
-                        for key, (player, x, y) in movement_inputs.items():
-                            if pressed[key]:
-                                move_player(board, player, x, y)
+    while True:
+        dt = clock.tick(60)
+        for event in pygame.event.get():
+            if event.type == locals.KEYDOWN:
+                handle_keys(dt)
+        update_game(dt)
 
-            for ai in ai_players:
-                move_player(board, ai, randint(-1, 1), randint(-1, 1))
+        pygame.display.flip()
 
-            if done:
-                pygame.quit()
-
-
-
-
-            # if is_blue: color = (0, 128, 255)
-            # else: color = (255, 100, 0)
-            # pygame.draw.rect(screen, color, pygame.Rect(x, y, 60, 60))
-
-            pygame.display.flip()
-            clock.tick(60)
