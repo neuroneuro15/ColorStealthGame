@@ -29,18 +29,30 @@ def blast_board(board):
 player_1 = make_player()
 player_2 = make_player()
 
-movement_inputs = {
-    locals.K_UP: (player_2, 0, -1),
-    locals.K_DOWN: (player_2, 0, 1),
-    locals.K_LEFT: (player_2, -1, 0),
-    locals.K_RIGHT: (player_2, 1, 0),
-    locals.K_w: (player_1, 0, -1),
-    locals.K_s: (player_1, 0, 1),
-    locals.K_a: (player_1, -1, 0),
-    locals.K_d: (player_1, 1, 0),
-}
+
+def check_for_win(players, player_moving):
+    for p1, p2 in itertools.combinations(players, 2):
+        if p1['x'] == p2['x'] and p1['y'] == p2['y']:
+            name = 'Player 1' if player_moving == player_1 else 'Player 2'
+            print('Contact! {} Wins!'.format(name))
+
+
+
 
 def handle_keys(dt):
+    movement_inputs = {
+        locals.K_UP: (player_2, 0, -1),
+        locals.K_DOWN: (player_2, 0, 1),
+        locals.K_LEFT: (player_2, -1, 0),
+        locals.K_RIGHT: (player_2, 1, 0),
+        locals.K_w: (player_1, 0, -1),
+        locals.K_s: (player_1, 0, 1),
+        locals.K_a: (player_1, -1, 0),
+        locals.K_d: (player_1, 1, 0),
+    }
+
+
+
     if event.key == locals.K_ESCAPE:
         pygame.quit()
     else:
@@ -48,11 +60,15 @@ def handle_keys(dt):
         for key, (player, x, y) in movement_inputs.items():
             if pressed[key]:
                 move_player(board, player, x, y)
+                check_for_win(players=[player_1, player_2],
+                              player_moving=player)
 
 
 def update_game(dt):
     for ai in ai_players:
         move_player(board, ai, randint(-1, 1), randint(-1, 1))
+
+
 
 if __name__ == '__main__':
 
@@ -65,7 +81,6 @@ if __name__ == '__main__':
 
     ai_players = [make_player() for _ in range(cfg.ai_players)]
 
-
     blast_board(board)
     clock = pygame.time.Clock()
     while True:
@@ -73,7 +88,7 @@ if __name__ == '__main__':
         for event in pygame.event.get():
             if event.type == locals.KEYDOWN:
                 handle_keys(dt)
-        update_game(dt)
 
+        update_game(dt)
         pygame.display.flip()
 
