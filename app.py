@@ -2,28 +2,27 @@ import pygame
 from pygame.locals import *
 from random import randint
 import itertools
+import cfg
 
 
-n_colors = 5
-board_size = 15
-screen = pygame.display.set_mode((800, 800))
+screen = pygame.display.set_mode(cfg.screen_resolution)
 screen.fill((0, 0, 0))
-px, py = screen.get_width() // board_size, screen.get_height() // board_size
+px = screen.get_width() // cfg.board_size
+py = screen.get_height() // cfg.board_size
 
-board = [[pygame.Rect(x * px, y * py, px, py) for x in range(board_size)] for y in range(board_size)]
+board = [[pygame.Rect(x * px, y * py, px, py) for x in range(cfg.board_size)] for y in range(cfg.board_size)]
 
 
 def make_player():
-    return {'x': randint(0, board_size), 'y': randint(0, board_size)}
+    return {'x': randint(0, cfg.board_size), 'y': randint(0, cfg.board_size)}
 
 
-n_ai_players = 2
-ai_players = [make_player() for _ in range(n_ai_players)]
+
+ai_players = [make_player() for _ in range(cfg.ai_players)]
 player_1 = make_player()
 player_2 = make_player()
 
 def move_player(board, player, x, y):
-
     x_new, y_new = player['x'] + x, player['y'] + y
     if (0 <= x_new < len(board[0])) and (0 <= y_new < len(board)):
         player['x'] = x_new
@@ -39,6 +38,16 @@ def blast_board(board):
         pygame.draw.rect(screen, color, tile)
 
 
+keyboard_actions = {
+    pygame.K_UP: (move_player, (board, player_2, 0, -1)),
+    pygame.K_DOWN: (move_player, (board, player_2, 0, 1)),
+    pygame.K_LEFT: (move_player, (board, player_2, -1, 0)),
+    pygame.K_RIGHT: (move_player, (board, player_2, 1, 0)),
+    pygame.K_w: (move_player, (board, player_1, 0, -1)),
+    pygame.K_s: (move_player, (board, player_1, 0, 1)),
+    pygame.K_a: (move_player, (board, player_1, -1, 0)),
+    pygame.K_d: (move_player, (board, player_1, 1, 0)),
+}
 
 
 if __name__ == '__main__':
@@ -56,22 +65,11 @@ if __name__ == '__main__':
                             done = True
                     if event.type == pygame.KEYDOWN:
                         pressed = pygame.key.get_pressed()
-                        if pressed[pygame.K_UP]:
-                            move_player(board, player_2, 0, -1)
-                        if pressed[pygame.K_DOWN]:
-                            move_player(board, player_2, 0, 1)
-                        if pressed[pygame.K_LEFT]:
-                            move_player(board, player_2, -1, 0)
-                        if pressed[pygame.K_RIGHT]:
-                            move_player(board, player_2, 1, 0)
-                        if pressed[pygame.K_w]:
-                            move_player(board, player_1, 0, -1)
-                        if pressed[pygame.K_s]:
-                            move_player(board, player_1, 0, 1)
-                        if pressed[pygame.K_a]:
-                            move_player(board, player_1, -1, 0)
-                        if pressed[pygame.K_d]:
-                            move_player(board, player_1, 1, 0)
+                        for key, (fun, args) in keyboard_actions.items():
+                            if pressed[key]:
+                                fun(*args)
+
+
 
             for ai in ai_players:
                 move_player(board, ai, randint(-1, 1), randint(-1, 1))
