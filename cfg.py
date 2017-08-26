@@ -2,7 +2,7 @@
 
 
 board_size = 10
-screen_resolution = (800, 800)
+screen_resolution = (500, 500)
 
 ai_players = 0
 

@@ -8,8 +8,10 @@ import cfg
 class Tile:
 
     def __init__(self, x, y, px, py, r, g, b):
+        self.x = x
+        self.y = y
         self.rect = pygame.Rect(x * px, y * py, px, py)
-        self.color = color.Color(r, g, b, a=255)
+        self.color = color.Color(r, g, b, 50)
 
     def draw(self, screen):
         r, g, b = self.color.r, self.color.g, self.color.b
@@ -29,6 +31,9 @@ class Tile:
         r, g, b = choice(theme)  # choose a color from the theme
         return cls(x, y, px, py, r, g, b)
 
+
+
+
 class Player:
 
     def __init__(self, name, x, y):
@@ -39,6 +44,10 @@ class Player:
     @property
     def xy(self):
         return self.x, self.y
+
+
+
+
 
 
 class Game:
@@ -58,12 +67,25 @@ class Game:
                         Player(name='Player 2', x=randint(0, cfg.board_size), y=randint(0, cfg.board_size)),]
 
     def move_player(self, player, dx, dy, dt):
-        x, y = player.x + dx, player.y + dy
-        if (0 <= x < self.width) and (0 <= y < self.height):
-            player.x, player.y = x, y
-            new_tile = self.board[y][x]
-            new_tile.randomize_color_from_theme(self.theme)
-            self.check_for_win(player)
+
+        def cycle(val, min, max):
+            if val < min:
+                return max - (val - min) - 2
+            elif val >= max:
+                return min + (val - max) + 0
+            else:
+                return val
+
+        print(player.x + dx, player.y + dy, flush=False)
+        x = cycle(player.x + dx, min=0, max=self.width)
+        y = cycle(player.y + dy, min=0, max=self.height)
+        print(x, y)
+
+        player.x, player.y = x, y
+        new_tile = self.board[y][x]
+        # new_tile.randomize_color_from_theme(self.theme)
+        new_tile.randomize_color()
+        self.check_for_win(player)
 
     def check_for_win(self, player_moving):
         for p1, p2 in itertools.combinations(self.players, 2):
@@ -72,6 +94,12 @@ class Game:
 
     def draw(self):
         for tile in itertools.chain(*self.board):
+            for player in self.players:
+                if player.x == tile.x and player.y == tile.y:
+                    if max(tile.color.r, tile.color.g, tile.color.b) < 255:
+                        tile.color.r += 1
+                        tile.color.g += 1
+                        tile.color.b += 1
             tile.draw(self.screen)
         pygame.display.flip()
 
