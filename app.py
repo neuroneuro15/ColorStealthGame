@@ -15,6 +15,11 @@ class Tile:
         r, g, b = self.color.r, self.color.g, self.color.b
         pygame.draw.rect(screen, (r, g, b), self.rect)
 
+    def randomize_color(self):
+        self.color.r = randint(0, 255)
+        self.color.g = randint(0, 255)
+        self.color.b = randint(0, 255)
+
 
 class Player:
 
@@ -44,11 +49,11 @@ class Game:
                         Player(name='Player 2', x=randint(0, cfg.board_size), y=randint(0, cfg.board_size)),]
 
     def move_player(self, player, dx, dy, dt):
-        x, y = player.x + dx, player.x + dy
+        x, y = player.x + dx, player.y + dy
         if (0 <= x < self.width) and (0 <= y < self.height):
             player.x, player.y = x, y
             new_tile = self.board[y][x]
-            new_tile.color = color.Color(randint(0, 255), randint(0, 255), randint(0, 255), a=255)
+            new_tile.randomize_color()
             self.check_for_win(player)
 
     def check_for_win(self, player_moving):
