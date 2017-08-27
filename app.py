@@ -8,6 +8,8 @@ from colorsys import hls_to_rgb, rgb_to_hls
 
 class WinMessage:
 
+    continue_button = K_SPACE
+
     def __init__(self):
         """This function gets called once, just to create the text (but not display it)."""
         pygame.font.init() 
@@ -105,7 +107,7 @@ class Game:
         self.players = [Player(name='Player 1', x=randint(0, cfg.board_size), y=randint(0, cfg.board_size)),
                         Player(name='Player 2', x=randint(0, cfg.board_size), y=randint(0, cfg.board_size)),]
 
-        self.win_text = WinMessage()
+
 
     def move_player(self, player, dx, dy, dt):
 
@@ -128,12 +130,15 @@ class Game:
 
         while old_hue == rgb_to_hls(new_tile.color.r, new_tile.color.g, new_tile.color.b)[0]:
             new_tile.randomize_color_from_theme(self.theme)
-        self.check_for_win(player)
 
-    def check_for_win(self, player_moving):
+
+    def check_for_win(self):
         for p1, p2 in itertools.combinations(self.players, 2):
             if p1.xy == p2.xy:
-                print('Contact! {} Wins!'.format(player_moving.name))
+                return True
+        else:
+            return False
+
 
     def draw(self):
         for tile in itertools.chain(*self.board):
@@ -149,7 +154,7 @@ class Game:
                         tile.color.g = int(g)
                         tile.color.b = int(b)
             tile.draw(self.screen)
-        self.win_text.draw(screen=self.screen)
+
         pygame.display.flip()
 
     def generate_board(self):
@@ -172,8 +177,12 @@ class Game:
         if event.key == K_ESCAPE:
             pygame.quit()
         else:
-            player, x, y, = movement_inputs[event.key]
-            self.move_player(player, x, y, dt)
+            try:
+                player, x, y, = movement_inputs[event.key]
+                self.move_player(player, x, y, dt)
+            except KeyError:
+                pass
+
 
     def show_start_screen(self):
         start_msg = StartGame()
@@ -188,11 +197,20 @@ class Game:
                         pygame.quit()
                         sys.exit()
 
-    def run(self):
+    def show_win_screen(self):
+        win_msg = WinMessage()
+        while True:
+            win_msg.draw(self.screen)
+            pygame.display.flip()
+            for event in pygame.event.get():
+                if event.type == KEYUP:
+                    if event.key == win_msg.continue_button:
+                        return
+                    if event.key == K_ESCAPE:
+                        pygame.quit()
+                        sys.exit()
 
-        # First Screen
-        self.show_start_screen()
-
+    def show_game(self):
         # GamePlay
         while True:
             dt = self.clock.tick(60)
@@ -201,6 +219,16 @@ class Game:
                     self.handle_keys(dt, event)
 
             self.draw()
+            win = self.check_for_win()
+            if win:
+                return
+
+    def run(self):
+        while True:
+            self.show_start_screen()
+            self.show_game()
+            self.show_win_screen()
+
 
 
 
