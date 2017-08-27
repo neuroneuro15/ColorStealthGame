@@ -14,5 +14,11 @@ setup(
     license='MIT',
     author='Nicholas A. Del Grosso and Anna Durbanova',
     author_email='delgrosso.nick@gmail.com',
-    description='Abstract Pygame made for mini game jam around the theme "invisibilitity".  Two Players have to find themselves in a chaotic sea, then find each other!'
+    description='Abstract Pygame made for mini game jam around the theme "invisibilitity".  Two Players have to find themselves in a chaotic sea, then find each other!',
+    classifiers=[
+            'Development Status :: 4 - Beta',
+            'Intended Audience :: System Administrators',
+            'License :: OSI Approved :: Apache Software License',
+            'Programming Language :: Python :: 3'
+        ],
 )
