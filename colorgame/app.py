@@ -235,8 +235,12 @@ class Game:
                        # return
 					#Anna
                     if event.key ==start_msg.easy_mode:
+                        cfg.ai_players = 3
+                        cfg.ai_move_probability = 1
                         return
                     if event.key ==start_msg.hard_mode:
+                        cfg.ai_players = 15
+                        cfg.ai_move_probability = 10
                         return
 					#Anna
                     if event.key == K_ESCAPE:
