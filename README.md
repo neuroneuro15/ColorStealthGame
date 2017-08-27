@@ -29,6 +29,9 @@ The game has 3 levels: Easy, Normal and Hard. To select the level the players ne
 - Button 2 - for the Normal Mode
 - Button 3 - for the Hard Mode
 
+![Start Menu Screenshot](Images/StartGame.png)
+
+
 For playing this game, you need a keyboard and the following buttons:
 - Up and W buttons are for moving up
 - Down and S buttons are for moving down
