@@ -6,6 +6,24 @@ import cfg
 from colorsys import hls_to_rgb, rgb_to_hls
 
 
+def blit_text(surface, text, pos, font, color=pygame.Color('black')):
+    words = [word.split(' ') for word in text.splitlines()]  # 2D array where each row is a list of words.
+    space = font.size(' ')[0]  # The width of a space.
+    max_width, max_height = surface.get_size()
+    x, y = pos
+    for line in words:
+        for word in line:
+            word_surface = font.render(word, 0, color)
+            word_width, word_height = word_surface.get_size()
+            if x + word_width >= max_width:
+                x = pos[0]  # Reset the x.
+                y += word_height  # Start on new row.
+            surface.blit(word_surface, (x, y))
+            x += word_width + space
+        x = pos[0]  # Reset the x.
+        y += word_height  # Start on new row.
+		
+		
 class WinMessage:
 
     def __init__(self):
@@ -16,7 +34,7 @@ class WinMessage:
     def draw(self, screen):
         """This is the function that gets called to actually display on the screen."""
         textsurface = self.myfont.render('Congratulations! You found each other!', False, (0, 0, 0))
-        #screen.fill((255, 255, 255))
+        screen.fill((152, 145, 241))
         screen.blit(textsurface,(99,250))
        
         return
@@ -33,8 +51,10 @@ class StartGame:
 
     def draw(self, screen):
         """This is the function that gets called to actually display on the screen."""
-        textsurface = self.myfont.render('This is Start Screen', False, (255, 0, 0))
-        screen.blit(textsurface,(99,250))
+        text = "This is Start Screen \nPress the Space Button to start"
+        #textsurface = self.myfont.render("This is Start Screen \nPress the Space Button to start", False, (0, 0, 0))
+        screen.fill((75,166,193))
+        blit_text(screen, text, (20,20), self.myfont)
         return
 
 
