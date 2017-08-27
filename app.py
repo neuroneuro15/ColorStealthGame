@@ -76,8 +76,10 @@ class GameText:
 
     def draw(self, screen):
         """This is the function that gets called to actually display on the screen."""
-        textsurface = self.myfont.render('Congratulations! You found each other!', False, (0, 0, 0))
-        screen.blit(textsurface,(99,250))
+        text = "How to Play the Game! \n \nTo move up - Press the Up or W Button \n \nTo move down - Press the Down  or S Button \n \nTo move left - Press the Left or A Button \n \nTo move right - Press the Right or D Button"
+        screen.fill((75,166,193))
+        blit_text(screen, text, (99,250), self.myfont)
+        
         return
 
 
@@ -231,6 +233,7 @@ class Game:
                     if event.key == K_ESCAPE:
                         pygame.quit()
                         sys.exit()
+	    
 
     def show_win_screen(self):
         win_msg = WinMessage()
