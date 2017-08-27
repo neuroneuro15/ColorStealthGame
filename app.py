@@ -47,14 +47,14 @@ class StartGame:
     def __init__(self):
         """This function gets called once, just to create the text (but not display it)."""
         pygame.font.init()
-        self.myfont = pygame.font.SysFont('TimesNewRoman', 30)
+        self.myfont = pygame.font.SysFont('TimesNewRoman', 25)
 
     def draw(self, screen):
         """This is the function that gets called to actually display on the screen."""
-        text = "This is Start Screen \nPress the Space Button to start"
+        text = "Welcome to the Game! \n \nTo start the game please press the Space Button"
         #textsurface = self.myfont.render("This is Start Screen \nPress the Space Button to start", False, (0, 0, 0))
         screen.fill((75,166,193))
-        blit_text(screen, text, (20,20), self.myfont)
+        blit_text(screen, text, (99,250), self.myfont)
         return
 
 
