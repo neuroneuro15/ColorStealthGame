@@ -1,9 +1,11 @@
+import itertools
+from colorsys import hls_to_rgb, rgb_to_hls
+from random import randint, choice
+
 import pygame
 from pygame.locals import *
-from random import randint, choice
-import itertools
-import cfg
-from colorsys import hls_to_rgb, rgb_to_hls
+
+from colorgame import cfg
 
 
 def blit_text(surface, text, pos, font, color=pygame.Color('black')):
@@ -112,14 +114,22 @@ class Tile:
 
 class Player:
 
-    def __init__(self, name, x, y):
+    def __init__(self, name, x=None, y=None):
         self.name = name
-        self.x = x
-        self.y = y
+        if type(x) == None and type(y) == None:
+            self.randomize_position()
+        else:
+            self.x = x
+            self.y = y
 
     @property
     def xy(self):
         return self.x, self.y
+
+    def randomize_position(self):
+        self.x = randint(0, cfg.board_size)
+        self.y = randint(0, cfg.board_size)
+
 
 
 class Game:
@@ -136,8 +146,9 @@ class Game:
         self.height = height
         self.board = self.generate_board()
         self.players = [Player(name='Player 1', x=randint(0, cfg.board_size), y=randint(0, cfg.board_size)),
-                        Player(name='Player 2', x=randint(0, cfg.board_size), y=randint(0, cfg.board_size)),]
-        self.ai_players = [Player('', x=randint(0, cfg.board_size), y=randint(0, cfg.board_size)) for _ in range(cfg.ai_players)]
+                        Player(name='Player 2', x=randint(0, cfg.board_size), y=randint(0, cfg.board_size)), ]
+        self.ai_players = [Player('', x=randint(0, cfg.board_size), y=randint(0, cfg.board_size)) for _ in range(
+            cfg.ai_players)]
 
 
     def move_player(self, player, dx, dy, dt):
@@ -226,8 +237,12 @@ class Game:
                        # return
 					#Anna
                     if event.key ==start_msg.easy_mode:
+                        cfg.ai_players = 3
+                        cfg.ai_move_probability = 1
                         return
                     if event.key ==start_msg.hard_mode:
+                        cfg.ai_players = 15
+                        cfg.ai_move_probability = 10
                         return
 					#Anna
                     if event.key == K_ESCAPE:
@@ -272,14 +287,18 @@ class Game:
             self.show_start_screen()
             self.show_game()
             self.show_win_screen()
+            for player in self.players:
+                player.randomize_position()
 
 
-
-
-if __name__ == '__main__':
-
+def main():
     theme = cfg.themes[0]
     game = Game(width=cfg.board_size, height=cfg.board_size, theme=theme)
     game.run()
+
+
+if __name__ == '__main__':
+    main()
+
 
 
