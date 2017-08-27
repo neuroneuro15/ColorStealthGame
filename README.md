@@ -9,7 +9,7 @@ The goal is to find your game partner in the environment of chaos and mess.
 Installation can be done through pip:
 
 ```bash
-    pip install git+https://github.com/AnnaD1992/ColorStealthGame
+    pip install ColorStealthGame
 ```
 
 ... or by running the setup.py file directly:
@@ -18,6 +18,14 @@ Installation can be done through pip:
     git clone https://github.com/AnnaD1992/ColorStealthGame
     cd ColorStealthGame
     python setup.py install
+```
+
+## Runnign the game
+
+In the terminal, run the game by simply typing the **colorgame** command:
+
+```bash
+colorgame
 ```
 
 ## How to Play
