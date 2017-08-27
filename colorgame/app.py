@@ -45,11 +45,11 @@ class WinMessage:
         """This function gets called once, just to create the text (but not display it)."""
         pygame.font.init()
         self.myfont = pygame.font.SysFont('TimesNewRoman', 30)
-
+        self.winner = 'I do not know'
     def draw(self, screen):
         """This is the function that gets called to actually display on the screen."""
         #textsurface = self.myfont.render('Congratulations! You found each other!', False, (0, 0, 0))
-        text="Congratulations! You found each other! \n \nTo play again press the Space Button \n \nIf you want to exit the game, Press ESC"
+        text="Congratulations, {}! You Won! \n \nTo play again press the Space Button \n \nIf you want to exit the game, Press ESC".format(self.winner)
         screen.fill((75,166,193))
         blit_text(screen, text, (99,250), self.myfont)
 
@@ -231,9 +231,11 @@ class Game:
             pygame.quit()
         elif event.key == K_RSHIFT:
             win = self.check_for_win(attacker=self.players[0], defender=self.players[1])
+            self.win_msg.winner = 'Player 1'
             return win
         elif event.key == K_LSHIFT:
             win = self.check_for_win(attacker=self.players[1], defender=self.players[0])
+            self.win_msg.winner = 'Player2'
             return win
         else:
             try:
@@ -285,13 +287,12 @@ class Game:
 
 
     def show_win_screen(self):
-        win_msg = WinMessage()
         while True:
-            win_msg.draw(self.screen)
+            self.win_msg.draw(self.screen)
             pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == KEYUP:
-                    if event.key == win_msg.continue_button:
+                    if event.key == self.win_msg.continue_button:
                         return
 
                     if event.key == K_ESCAPE:
@@ -317,6 +318,7 @@ class Game:
 
     def run(self):
         while True:
+            self.win_msg = WinMessage()
             self.show_start_screen()
             self.show_game_text()
             self.show_game()
