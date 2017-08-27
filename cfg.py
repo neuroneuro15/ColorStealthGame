@@ -2,7 +2,7 @@
 
 
 board_size = 10
-screen_resolution = (800, 800)
+screen_resolution = (600, 600)
 
 brighten_rate = -.3
 ai_players = 0

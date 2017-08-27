@@ -10,11 +10,14 @@ class WinMessage:
 
     def __init__(self):
         """This function gets called once, just to create the text (but not display it)."""
-        pass
+        pygame.font.init() 
+        self.myfont = pygame.font.SysFont('TimesNewRoman', 30)
 
     def draw(self, screen):
         """This is the function that gets called to actually display on the screen."""
-        pass
+        textsurface = self.myfont.render('Congratulations! You found each other!', False, (0, 0, 0))
+        screen.blit(textsurface,(99,250))
+        return
 
 
 class Tile:
