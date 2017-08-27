@@ -27,6 +27,8 @@ def blit_text(surface, text, pos, font, color=pygame.Color('black')):
 class WinMessage:
 
     continue_button = K_SPACE
+    exit = K_ESCAPE
+    
 
     def __init__(self):
         """This function gets called once, just to create the text (but not display it)."""
@@ -35,16 +37,21 @@ class WinMessage:
 
     def draw(self, screen):
         """This is the function that gets called to actually display on the screen."""
-        textsurface = self.myfont.render('Congratulations! You found each other!', False, (0, 0, 0))
-        screen.fill((152, 145, 241))
-        screen.blit(textsurface,(99,250))
-       
+        #textsurface = self.myfont.render('Congratulations! You found each other!', False, (0, 0, 0))
+        text="Congratulations! You found each other! \n \nTo play again press the Space Button \n \nIf you want to exit the game, Press ESC"
+        screen.fill((75,166,193))
+        blit_text(screen, text, (99,250), self.myfont)
+      
         return
+	
 
 
 class StartGame:
 
-    continue_button = K_SPACE
+    #continue_button = K_SPACE
+    easy_mode=K_1
+    hard_mode=K_2
+    
 
     def __init__(self):
         """This function gets called once, just to create the text (but not display it)."""
@@ -53,7 +60,7 @@ class StartGame:
 
     def draw(self, screen):
         """This is the function that gets called to actually display on the screen."""
-        text = "Welcome to the Game! \n \nTo start the game please press the Space Button"
+        text = "Welcome to the Game! \n \nTo start the game please press the following buttons \n \n-To play an Easy Mode Press 1 \n \n-To Play a Hard Mode Press 2"
         #textsurface = self.myfont.render("This is Start Screen \nPress the Space Button to start", False, (0, 0, 0))
         screen.fill((75,166,193))
         blit_text(screen, text, (99,250), self.myfont)
@@ -213,8 +220,14 @@ class Game:
             pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == KEYUP:
-                    if event.key == start_msg.continue_button:
+                    #if event.key == start_msg.continue_button:
+                       # return
+					#Anna
+                    if event.key ==start_msg.easy_mode:
                         return
+                    if event.key ==start_msg.hard_mode:
+                        return
+					#Anna
                     if event.key == K_ESCAPE:
                         pygame.quit()
                         sys.exit()
@@ -228,6 +241,7 @@ class Game:
                 if event.type == KEYUP:
                     if event.key == win_msg.continue_button:
                         return
+					
                     if event.key == K_ESCAPE:
                         pygame.quit()
                         sys.exit()
