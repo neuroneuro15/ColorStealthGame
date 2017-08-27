@@ -33,17 +33,17 @@ def blit_text(surface, text, pos, font, color=pygame.Color('black')):
             x += word_width + space
         x = pos[0]  # Reset the x.
         y += word_height  # Start on new row.
-		
-		
+
+
 class WinMessage:
 
     continue_button = K_SPACE
     exit = K_ESCAPE
-    
+
 
     def __init__(self):
         """This function gets called once, just to create the text (but not display it)."""
-        pygame.font.init() 
+        pygame.font.init()
         self.myfont = pygame.font.SysFont('TimesNewRoman', 30)
 
     def draw(self, screen):
@@ -52,9 +52,9 @@ class WinMessage:
         text="Congratulations! You found each other! \n \nTo play again press the Space Button \n \nIf you want to exit the game, Press ESC"
         screen.fill((75,166,193))
         blit_text(screen, text, (99,250), self.myfont)
-      
+
         return
-	
+
 
 
 class StartGame:
@@ -63,8 +63,8 @@ class StartGame:
     easy_mode=K_1
     normal_mode=K_2
     hard_mode=K_3
-	
-    
+
+
 
     def __init__(self):
         """This function gets called once, just to create the text (but not display it)."""
@@ -92,8 +92,9 @@ class GameText:
         text = "How to Play the Game!? \n \n-To move up - Press the Up or W Button \n \n-To move down - Press the Down  or S Button \n \n-To move left - Press the Left or A Button \n \n-To move right - Press the Right or D Button \n \nReady to Start? \nLet's Go! Press the Space Button!"
         screen.fill((75,166,193))
         blit_text(screen, text, (30,30), self.myfont)
-        
+
         return
+
 
 
 class Tile:
@@ -158,8 +159,7 @@ class Game:
         self.board = self.generate_board()
         self.players = [Player(name='Player 1', x=randint(0, cfg.board_size), y=randint(0, cfg.board_size)),
                         Player(name='Player 2', x=randint(0, cfg.board_size), y=randint(0, cfg.board_size)), ]
-        self.ai_players = [Player('', x=randint(0, cfg.board_size), y=randint(0, cfg.board_size)) for _ in range(
-            cfg.ai_players)]
+        self.ai_players = [Player('', x=randint(0, cfg.board_size), y=randint(0, cfg.board_size)) for _ in range(cfg.ai_players)]
 
 
     def move_player(self, player, dx, dy, dt):
@@ -178,13 +178,13 @@ class Game:
             new_tile.randomize_color_from_theme(self.theme)
 
 
-    def check_for_win(self):
-        p1, p2 = self.players
+    def check_for_win(self, attacker, defender):
+
         bomb_directions = itertools.product((-1, 0, 1), (-1, 0, 1))
         for dx, dy in bomb_directions:
-            x = cycle(p1.x + dx, min=0, max=self.width)
-            y = cycle(p1.y + dy, min=0, max=self.height)
-            if x == p2.x and y == p2.y:
+            x = cycle(attacker.x + dx, min=0, max=self.width)
+            y = cycle(attacker.y + dy, min=0, max=self.height)
+            if x == defender.x and y == defender.y:
                 return True
             else:
                 tile = self.board[y][x]
@@ -229,6 +229,12 @@ class Game:
 
         if event.key == K_ESCAPE:
             pygame.quit()
+        elif event.key == K_RSHIFT:
+            win = self.check_for_win(attacker=self.players[0], defender=self.players[1])
+            return win
+        elif event.key == K_LSHIFT:
+            win = self.check_for_win(attacker=self.players[1], defender=self.players[0])
+            return win
         else:
             try:
                 player, x, y, = movement_inputs[event.key]
@@ -245,8 +251,8 @@ class Game:
             for event in pygame.event.get():
                 if event.type == KEYUP:
                     #if event.key == start_msg.continue_button:
-                       # return
-					#Anna
+                    # return
+                    #Anna
                     if event.key ==start_msg.easy_mode:
                         cfg.ai_players = 3
                         cfg.ai_move_probability = 1
@@ -259,11 +265,11 @@ class Game:
                         cfg.ai_players = 15
                         cfg.ai_move_probability = 10
                         return
-					#Anna
+                    #Anna
                     if event.key == K_ESCAPE:
                         pygame.quit()
                         sys.exit()
-						
+
     def show_game_text(self):
         game_text=GameText()
         while True:
@@ -273,13 +279,10 @@ class Game:
                 if event.type==KEYUP:
                     if event.key ==game_text.continue_button:
                         return
-					
-					
                     if event.key==K_ESCAPE:
-                       pygame.quit()
-                       sys.exit()
-						 
-	    
+                        pygame.quit()
+                        sys.exit()
+
 
     def show_win_screen(self):
         win_msg = WinMessage()
@@ -290,7 +293,7 @@ class Game:
                 if event.type == KEYUP:
                     if event.key == win_msg.continue_button:
                         return
-					
+
                     if event.key == K_ESCAPE:
                         pygame.quit()
                         sys.exit()
@@ -306,12 +309,11 @@ class Game:
 
             for event in pygame.event.get():
                 if event.type == KEYUP:
-                    self.handle_keys(dt, event)
+                    win = self.handle_keys(dt, event)
+                    if win:
+                        return
 
             self.draw()
-            win = self.check_for_win()
-            if win:
-                return
 
     def run(self):
         while True:
