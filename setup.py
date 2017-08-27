@@ -17,8 +17,10 @@ setup(
     description='Abstract Pygame made for mini game jam around the theme "invisibilitity".  Two Players have to find themselves in a chaotic sea, then find each other!',
     classifiers=[
             'Development Status :: 4 - Beta',
-            'Intended Audience :: System Administrators',
-            'License :: OSI Approved :: Apache Software License',
-            'Programming Language :: Python :: 3'
+            'Intended Audience :: End Users/Desktop',
+            'License :: OSI Approved :: MIT License',
+            'Programming Language :: Python :: 3',
+            'Topic :: Games/Entertainment :: Arcade',
+            'Natural Language :: English'
         ],
 )
