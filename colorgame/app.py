@@ -1,9 +1,11 @@
+import itertools
+from colorsys import hls_to_rgb, rgb_to_hls
+from random import randint, choice
+
 import pygame
 from pygame.locals import *
-from random import randint, choice
-import itertools
-import cfg
-from colorsys import hls_to_rgb, rgb_to_hls
+
+from colorgame import cfg
 
 
 def blit_text(surface, text, pos, font, color=pygame.Color('black')):
@@ -142,8 +144,9 @@ class Game:
         self.height = height
         self.board = self.generate_board()
         self.players = [Player(name='Player 1', x=randint(0, cfg.board_size), y=randint(0, cfg.board_size)),
-                        Player(name='Player 2', x=randint(0, cfg.board_size), y=randint(0, cfg.board_size)),]
-        self.ai_players = [Player('', x=randint(0, cfg.board_size), y=randint(0, cfg.board_size)) for _ in range(cfg.ai_players)]
+                        Player(name='Player 2', x=randint(0, cfg.board_size), y=randint(0, cfg.board_size)), ]
+        self.ai_players = [Player('', x=randint(0, cfg.board_size), y=randint(0, cfg.board_size)) for _ in range(
+            cfg.ai_players)]
 
 
     def move_player(self, player, dx, dy, dt):
@@ -281,12 +284,14 @@ class Game:
                 player.randomize_position()
 
 
-
-
-if __name__ == '__main__':
-
+def main():
     theme = cfg.themes[0]
     game = Game(width=cfg.board_size, height=cfg.board_size, theme=theme)
     game.run()
+
+
+if __name__ == '__main__':
+    main()
+
 
 
