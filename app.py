@@ -79,8 +79,10 @@ class Game:
 
         player.x, player.y = x, y
         new_tile = self.board[y][x]
-        new_tile.randomize_color_from_theme(self.theme)
-        # new_tile.randomize_color()
+        old_hue = rgb_to_hls(new_tile.color.r, new_tile.color.g, new_tile.color.b)[0]
+
+        while old_hue == rgb_to_hls(new_tile.color.r, new_tile.color.g, new_tile.color.b)[0]:
+            new_tile.randomize_color_from_theme(self.theme)
         self.check_for_win(player)
 
     def check_for_win(self, player_moving):
