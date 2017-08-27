@@ -70,17 +70,17 @@ class StartGame:
 
 
 class GameText:
-
+    continue_button = K_SPACE
     def __init__(self):
         """This function gets called once, just to create the text (but not display it)."""
         pygame.font.init()
-        self.myfont = pygame.font.SysFont('TimesNewRoman', 30)
+        self.myfont = pygame.font.SysFont('TimesNewRoman', 25)
 
     def draw(self, screen):
         """This is the function that gets called to actually display on the screen."""
-        text = "How to Play the Game! \n \nTo move up - Press the Up or W Button \n \nTo move down - Press the Down  or S Button \n \nTo move left - Press the Left or A Button \n \nTo move right - Press the Right or D Button"
+        text = "How to Play the Game!? \n \n-To move up - Press the Up or W Button \n \n-To move down - Press the Down  or S Button \n \n-To move left - Press the Left or A Button \n \n-To move right - Press the Right or D Button \n \nReady to Start? \nLet's Go! Press the Space Button!"
         screen.fill((75,166,193))
-        blit_text(screen, text, (99,250), self.myfont)
+        blit_text(screen, text, (30,30), self.myfont)
         
         return
 
@@ -248,6 +248,22 @@ class Game:
                     if event.key == K_ESCAPE:
                         pygame.quit()
                         sys.exit()
+						
+    def show_game_text(self):
+        game_text=GameText()
+        while True:
+            game_text.draw(self.screen)
+            pygame.display.flip()
+            for event in pygame.event.get():
+                if event.type==KEYUP:
+                    if event.key ==game_text.continue_button:
+                        return
+					
+					
+                    if event.key==K_ESCAPE:
+                       pygame.quit()
+                       sys.exit()
+						 
 	    
 
     def show_win_screen(self):
@@ -285,6 +301,7 @@ class Game:
     def run(self):
         while True:
             self.show_start_screen()
+            self.show_game_text()
             self.show_game()
             self.show_win_screen()
             for player in self.players:
