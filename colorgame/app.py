@@ -52,7 +52,9 @@ class StartGame:
 
     #continue_button = K_SPACE
     easy_mode=K_1
-    hard_mode=K_2
+    normal_mode=K_2
+    hard_mode=K_3
+	
     
 
     def __init__(self):
@@ -62,7 +64,7 @@ class StartGame:
 
     def draw(self, screen):
         """This is the function that gets called to actually display on the screen."""
-        text = "Welcome to the Game! \n \nTo start the game please press the following buttons \n \n-To play an Easy Mode Press 1 \n \n-To Play a Hard Mode Press 2"
+        text = "Welcome to the Game! \n \nTo start the game please press the following buttons \n \n-To play an Easy Mode Press 1 \n \n-To Play a Normal Mode Press 2 \n \n-To Play a Hard Mode Press 3"
         #textsurface = self.myfont.render("This is Start Screen \nPress the Space Button to start", False, (0, 0, 0))
         screen.fill((75,166,193))
         blit_text(screen, text, (99,250), self.myfont)
@@ -239,6 +241,10 @@ class Game:
                     if event.key ==start_msg.easy_mode:
                         cfg.ai_players = 3
                         cfg.ai_move_probability = 1
+                        return
+                    if event.key ==start_msg.normal_mode:
+                        cfg.ai_players = 7
+                        cfg.ai_move_probability = 5
                         return
                     if event.key ==start_msg.hard_mode:
                         cfg.ai_players = 15
