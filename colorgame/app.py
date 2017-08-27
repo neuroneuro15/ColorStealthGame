@@ -52,7 +52,9 @@ class StartGame:
 
     #continue_button = K_SPACE
     easy_mode=K_1
-    hard_mode=K_2
+    normal_mode=K_2
+    hard_mode=K_3
+	
     
 
     def __init__(self):
@@ -62,7 +64,7 @@ class StartGame:
 
     def draw(self, screen):
         """This is the function that gets called to actually display on the screen."""
-        text = "Welcome to the Game! \n \nTo start the game please press the following buttons \n \n-To play an Easy Mode Press 1 \n \n-To Play a Hard Mode Press 2"
+        text = "Welcome to the Game! \n \nTo start the game please press the following buttons \n \n-To play an Easy Mode Press 1 \n \n-To Play a Normal Mode Press 2 \n \n-To Play a Hard Mode Press 3"
         #textsurface = self.myfont.render("This is Start Screen \nPress the Space Button to start", False, (0, 0, 0))
         screen.fill((75,166,193))
         blit_text(screen, text, (99,250), self.myfont)
@@ -70,16 +72,18 @@ class StartGame:
 
 
 class GameText:
-
+    continue_button = K_SPACE
     def __init__(self):
         """This function gets called once, just to create the text (but not display it)."""
         pygame.font.init()
-        self.myfont = pygame.font.SysFont('TimesNewRoman', 30)
+        self.myfont = pygame.font.SysFont('TimesNewRoman', 25)
 
     def draw(self, screen):
         """This is the function that gets called to actually display on the screen."""
-        textsurface = self.myfont.render('Congratulations! You found each other!', False, (0, 0, 0))
-        screen.blit(textsurface,(99,250))
+        text = "How to Play the Game!? \n \n-To move up - Press the Up or W Button \n \n-To move down - Press the Down  or S Button \n \n-To move left - Press the Left or A Button \n \n-To move right - Press the Right or D Button \n \nReady to Start? \nLet's Go! Press the Space Button!"
+        screen.fill((75,166,193))
+        blit_text(screen, text, (30,30), self.myfont)
+        
         return
 
 
@@ -238,6 +242,10 @@ class Game:
                         cfg.ai_players = 3
                         cfg.ai_move_probability = 1
                         return
+                    if event.key ==start_msg.normal_mode:
+                        cfg.ai_players = 7
+                        cfg.ai_move_probability = 5
+                        return
                     if event.key ==start_msg.hard_mode:
                         cfg.ai_players = 15
                         cfg.ai_move_probability = 10
@@ -246,6 +254,23 @@ class Game:
                     if event.key == K_ESCAPE:
                         pygame.quit()
                         sys.exit()
+						
+    def show_game_text(self):
+        game_text=GameText()
+        while True:
+            game_text.draw(self.screen)
+            pygame.display.flip()
+            for event in pygame.event.get():
+                if event.type==KEYUP:
+                    if event.key ==game_text.continue_button:
+                        return
+					
+					
+                    if event.key==K_ESCAPE:
+                       pygame.quit()
+                       sys.exit()
+						 
+	    
 
     def show_win_screen(self):
         win_msg = WinMessage()
@@ -282,6 +307,7 @@ class Game:
     def run(self):
         while True:
             self.show_start_screen()
+            self.show_game_text()
             self.show_game()
             self.show_win_screen()
             for player in self.players:
