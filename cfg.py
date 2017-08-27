@@ -1,11 +1,12 @@
 
 
 
-board_size = 10
+board_size = 15
 screen_resolution = (600, 600)
 
 brighten_rate = -.3
-ai_players = 0
+ai_players = 15
+ai_move_probability = 10  # A number from 0 - 100
 min_lightness = 100
 themes = [[(159, 37, 253),
            (253, 81, 37),

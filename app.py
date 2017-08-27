@@ -128,7 +128,7 @@ class Game:
         self.board = self.generate_board()
         self.players = [Player(name='Player 1', x=randint(0, cfg.board_size), y=randint(0, cfg.board_size)),
                         Player(name='Player 2', x=randint(0, cfg.board_size), y=randint(0, cfg.board_size)),]
-
+        self.ai_players = [Player('', x=randint(0, cfg.board_size), y=randint(0, cfg.board_size)) for _ in range(cfg.ai_players)]
 
 
     def move_player(self, player, dx, dy, dt):
@@ -236,6 +236,11 @@ class Game:
         # GamePlay
         while True:
             dt = self.clock.tick(60)
+
+            for ai in self.ai_players:
+                if randint(0, 100) < cfg.ai_move_probability:
+                    self.move_player(ai, randint(-1, 1), randint(-1, 1), dt)
+
             for event in pygame.event.get():
                 if event.type == KEYUP:
                     self.handle_keys(dt, event)
