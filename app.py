@@ -22,6 +22,36 @@ class WinMessage:
         return
 
 
+class StartGame:
+
+    continue_button = K_SPACE
+
+    def __init__(self):
+        """This function gets called once, just to create the text (but not display it)."""
+        pygame.font.init()
+        self.myfont = pygame.font.SysFont('TimesNewRoman', 30)
+
+    def draw(self, screen):
+        """This is the function that gets called to actually display on the screen."""
+        textsurface = self.myfont.render('This is Start Screen', False, (255, 0, 0))
+        screen.blit(textsurface,(99,250))
+        return
+
+
+class GameText:
+
+    def __init__(self):
+        """This function gets called once, just to create the text (but not display it)."""
+        pygame.font.init()
+        self.myfont = pygame.font.SysFont('TimesNewRoman', 30)
+
+    def draw(self, screen):
+        """This is the function that gets called to actually display on the screen."""
+        textsurface = self.myfont.render('Congratulations! You found each other!', False, (0, 0, 0))
+        screen.blit(textsurface,(99,250))
+        return
+
+
 class Tile:
 
     def __init__(self, x, y, px, py, r, g, b):
@@ -147,12 +177,28 @@ class Game:
             player, x, y, = movement_inputs[event.key]
             self.move_player(player, x, y, dt)
 
+    def show_start_screen(self):
+        start_msg = StartGame()
+        while True:
+            start_msg.draw(self.screen)
+            pygame.display.flip()
+            for event in pygame.event.get():
+                if event.type == KEYUP:
+                    if event.key == start_msg.continue_button:
+                        return
+                    if event.key == K_ESCAPE:
+                        pygame.quit()
+                        sys.exit()
 
     def run(self):
+
+        # First Screen
+        self.show_start_screen()
+
+        # GamePlay
         while True:
             dt = self.clock.tick(60)
             for event in pygame.event.get():
-                print(event)
                 if event.type == KEYUP:
                     self.handle_keys(dt, event)
 
