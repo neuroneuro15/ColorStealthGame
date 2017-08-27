@@ -46,11 +46,20 @@ For playing this game, you need a keyboard and the following buttons:
 - Left and A buttons are for moving left
 - Right and D buttons are for moving right
 
+![Instruction Screenshot](Images/Instuctions.png)
+
+The design of the game is below:
+
+![Game Screenshot](Images/Game.png)
+
 For quitting the game, the players need to press the <strong>ESC</strong> button
+
 
 ## The end of the game
 
 At the end of the game, the players can start over by pressing the <strong>Space</strong> Button
+
+![End of the Game Screenshot](Images/WinMessage.png)
 
 ## Authors
 Nicholas Del Grosso,
