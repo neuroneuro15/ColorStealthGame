@@ -1,3 +1,4 @@
+import sys
 import itertools
 from colorsys import hls_to_rgb, rgb_to_hls
 from random import randint, choice
@@ -7,6 +8,14 @@ from pygame.locals import *
 
 from colorgame import cfg
 
+
+def cycle(val, min, max):
+    if val < min:
+        return max - (val - min) - 2
+    elif val >= max:
+        return min + (val - max) + 0
+    else:
+        return val
 
 def blit_text(surface, text, pos, font, color=pygame.Color('black')):
     words = [word.split(' ') for word in text.splitlines()]  # 2D array where each row is a list of words.
@@ -155,13 +164,6 @@ class Game:
 
     def move_player(self, player, dx, dy, dt):
 
-        def cycle(val, min, max):
-            if val < min:
-                return max - (val - min) - 2
-            elif val >= max:
-                return min + (val - max) + 0
-            else:
-                return val
 
         print(player.x + dx, player.y + dy, flush=False)
         x = cycle(player.x + dx, min=0, max=self.width)
@@ -177,9 +179,16 @@ class Game:
 
 
     def check_for_win(self):
-        for p1, p2 in itertools.combinations(self.players, 2):
-            if p1.xy == p2.xy:
+        p1, p2 = self.players
+        bomb_directions = itertools.product((-1, 0, 1), (-1, 0, 1))
+        for dx, dy in bomb_directions:
+            x = cycle(p1.x + dx, min=0, max=self.width)
+            y = cycle(p1.y + dy, min=0, max=self.height)
+            if x == p2.x and y == p2.y:
                 return True
+            else:
+                tile = self.board[y][x]
+                tile.randomize_color_from_theme(self.theme)
         else:
             return False
 
