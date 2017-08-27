@@ -20,7 +20,7 @@ Installation can be done through pip:
     python setup.py install
 ```
 
-## Runnign the game
+## Running the game
 
 In the terminal, run the game by simply typing the **colorgame** command:
 
