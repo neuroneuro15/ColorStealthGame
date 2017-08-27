@@ -110,14 +110,22 @@ class Tile:
 
 class Player:
 
-    def __init__(self, name, x, y):
+    def __init__(self, name, x=None, y=None):
         self.name = name
-        self.x = x
-        self.y = y
+        if type(x) == None and type(y) == None:
+            self.randomize_position()
+        else:
+            self.x = x
+            self.y = y
 
     @property
     def xy(self):
         return self.x, self.y
+
+    def randomize_position(self):
+        self.x = randint(0, cfg.board_size)
+        self.y = randint(0, cfg.board_size)
+
 
 
 class Game:
@@ -269,6 +277,8 @@ class Game:
             self.show_start_screen()
             self.show_game()
             self.show_win_screen()
+            for player in self.players:
+                player.randomize_position()
 
 
 
