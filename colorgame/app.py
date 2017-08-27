@@ -67,7 +67,7 @@ class StartGame:
         text = "Welcome to the Game! \n \nTo start the game please press the following buttons \n \n-To play an Easy Mode Press 1 \n \n-To Play a Normal Mode Press 2 \n \n-To Play a Hard Mode Press 3"
         #textsurface = self.myfont.render("This is Start Screen \nPress the Space Button to start", False, (0, 0, 0))
         screen.fill((75,166,193))
-        blit_text(screen, text, (99,250), self.myfont)
+        blit_text(screen, text, (99,150), self.myfont)
         return
 
 
