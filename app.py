@@ -16,7 +16,9 @@ class WinMessage:
     def draw(self, screen):
         """This is the function that gets called to actually display on the screen."""
         textsurface = self.myfont.render('Congratulations! You found each other!', False, (0, 0, 0))
+        #screen.fill((255, 255, 255))
         screen.blit(textsurface,(99,250))
+       
         return
 
 
