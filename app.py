@@ -34,8 +34,6 @@ class Tile:
         return cls(x, y, px, py, r, g, b)
 
 
-
-
 class Player:
 
     def __init__(self, name, x, y):
@@ -46,10 +44,6 @@ class Player:
     @property
     def xy(self):
         return self.x, self.y
-
-
-
-
 
 
 class Game:
@@ -130,17 +124,16 @@ class Game:
         if event.key == K_ESCAPE:
             pygame.quit()
         else:
-            pressed = pygame.key.get_pressed()
-            for key, (player, x, y) in movement_inputs.items():
-                if pressed[key]:
-                    self.move_player(player, x, y, dt)
+            player, x, y, = movement_inputs[event.key]
+            self.move_player(player, x, y, dt)
 
 
     def run(self):
         while True:
             dt = self.clock.tick(60)
             for event in pygame.event.get():
-                if event.type == KEYDOWN:
+                print(event)
+                if event.type == KEYUP:
                     self.handle_keys(dt, event)
 
             self.draw()
