@@ -6,6 +6,16 @@ import cfg
 from colorsys import hls_to_rgb, rgb_to_hls
 
 
+class WinMessage:
+
+    def __init__(self):
+        """This function gets called once, just to create the text (but not display it)."""
+        pass
+
+    def draw(self, screen):
+        """This is the function that gets called to actually display on the screen."""
+        pass
+
 
 class Tile:
 
@@ -62,6 +72,8 @@ class Game:
         self.players = [Player(name='Player 1', x=randint(0, cfg.board_size), y=randint(0, cfg.board_size)),
                         Player(name='Player 2', x=randint(0, cfg.board_size), y=randint(0, cfg.board_size)),]
 
+        self.win_text = WinMessage()
+
     def move_player(self, player, dx, dy, dt):
 
         def cycle(val, min, max):
@@ -104,6 +116,7 @@ class Game:
                         tile.color.g = int(g)
                         tile.color.b = int(b)
             tile.draw(self.screen)
+        self.win_text.draw(screen=self.screen)
         pygame.display.flip()
 
     def generate_board(self):
