@@ -85,6 +85,7 @@ class GameText:
         blit_text(screen, text, (30,30), self.myfont)
         
         return
+			 
 
 
 class Tile:
@@ -179,6 +180,7 @@ class Game:
     def check_for_win(self):
         for p1, p2 in itertools.combinations(self.players, 2):
             if p1.xy == p2.xy:
+			
                 return True
         else:
             return False
@@ -220,6 +222,12 @@ class Game:
 
         if event.key == K_ESCAPE:
             pygame.quit()
+        elif event.key == K_RSHIFT:
+            win = self.check_for_win()
+            return win
+        elif event.key == K_LSHIFT:
+            win=self.check_for_win()
+            return win
         else:
             try:
                 player, x, y, = movement_inputs[event.key]
@@ -297,12 +305,11 @@ class Game:
 
             for event in pygame.event.get():
                 if event.type == KEYUP:
-                    self.handle_keys(dt, event)
+                    win = self.handle_keys(dt, event)
+                    if win:
+                        return
 
             self.draw()
-            win = self.check_for_win()
-            if win:
-                return
 
     def run(self):
         while True:
