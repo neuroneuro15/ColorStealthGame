@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup
 
 setup(
     name='ColorStealthGame',
@@ -7,7 +7,6 @@ setup(
     install_requires=[
         'pygame'
     ],
-    scripts = ['']
     entry_points={
         'console_scripts': ['colorgame=colorgame.app:main'],
     },
