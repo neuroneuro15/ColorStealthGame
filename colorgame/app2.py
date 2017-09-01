@@ -4,11 +4,13 @@ from . import cfg
 import itertools
 import random
 from .sprites import Tile, Player
-from .menus import WinMessage
+from . import menus
 
 
 # Create Game Objects
-win_screen = WinMessage()
+start_screen = menus.StartGame()
+win_screen = menus.WinMessage()
+instruction_screen = menus.GameText()
 
 player1 = Player(color=(255, 255, 255), x=random.randint(0, cfg.board_size), y=random.randint(0, cfg.board_size))
 player2 = Player(color=(0, 0, 0), x=random.randint(0, cfg.board_size), y=random.randint(0, cfg.board_size))
@@ -36,6 +38,10 @@ keyboard_inputs = {
 # Our main loop!
 pygame.init()
 screen = pygame.display.set_mode(cfg.screen_resolution)
+
+start_screen.run(screen)
+instruction_screen.run(screen)
+
 while True:
     # for loop through the event queue
     for event in pygame.event.get():
@@ -53,7 +59,9 @@ while True:
     for num, player in enumerate([player1, player2]):
         if player.check_if_won():
             win_screen.winner = 'Player {}'.format(num + 1)
+            win_screen.run(screen)
             pygame.quit()
+
 
     # Draw the player to the screen
     screen.fill((0, 0, 0))

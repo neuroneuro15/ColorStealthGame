@@ -69,6 +69,10 @@ class Tile(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
+    def randomize_position(self):
+        self.x = random.randint(0, cfg.board_size)
+        self.y = random.randint(0, cfg.board_size)
+
     def update(self, dt):
         pass
 
