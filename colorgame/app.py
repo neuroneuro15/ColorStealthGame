@@ -1,8 +1,4 @@
 import pygame
-from pygame.locals import *
-import itertools
-import random
-from sprites import Tile, Player
 import cfg
 import menus
 import scenes
