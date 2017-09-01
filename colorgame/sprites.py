@@ -1,7 +1,7 @@
 import itertools
 import random
 import pygame
-from . import cfg
+import cfg
 
 
 class Tile(pygame.sprite.Sprite):

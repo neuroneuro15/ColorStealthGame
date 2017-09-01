@@ -1,5 +1,5 @@
 import pygame
-from . import utils, cfg
+import utils, cfg
 from pygame.locals import *
 import sys
 

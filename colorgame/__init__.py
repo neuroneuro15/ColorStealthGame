@@ -1,2 +1,4 @@
-from . import app, app2
-from . import cfg, sprites, utils
+from . import app
+from . import cfg
+from . import sprites
+from . import utils
