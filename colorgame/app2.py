@@ -5,23 +5,28 @@ import itertools
 import random
 from .sprites import Tile, Player
 
-
-player1 = Player(color=(255, 255, 255))
-player2 = Player(color=(0, 0, 255))
+# Create Game Objects
+player1 = Player(color=(255, 255, 255), x=random.randint(0, cfg.board_size), y=random.randint(0, cfg.board_size))
+player2 = Player(color=(0, 0, 0), x=random.randint(0, cfg.board_size), y=random.randint(0, cfg.board_size))
 
 tiles = {}
 for x, y in itertools.product(range(0, cfg.board_size), range(0, cfg.board_size)):
     tiles[x, y] = Tile(x=x, y=y, color=random.choice(cfg.themes))
 
 
-
+# Configure Inputs
 keyboard_inputs = {
     K_ESCAPE: (pygame.quit, ),
     K_UP: (player1.move, 0, -1),
     K_DOWN: (player1.move, 0, 1),
     K_LEFT: (player1.move, -1, 0),
     K_RIGHT: (player1.move, 1, 0),
-    K_RSHIFT: (player1.bomb, tiles),
+    K_RSHIFT: (player1.bomb, tiles, player2),
+    K_w: (player2.move, 0, -1),
+    K_s: (player2.move, 0, 1),
+    K_a: (player2.move, -1, 0),
+    K_d: (player2.move, 1, 0),
+    K_LSHIFT: (player2.bomb, tiles, player1),
 }
 
 # Our main loop!
@@ -46,5 +51,6 @@ while True:
     for tile in tiles.values():
         tile.draw(screen)
     player1.draw(screen)
+    player2.draw(screen)
 
     pygame.display.flip()
