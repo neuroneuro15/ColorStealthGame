@@ -102,6 +102,8 @@ class Tile:
     def __init__(self, x, y, px, py, r, g, b):
         self.x = x
         self.y = y
+        self.surf = pygame.Surface((px, py))
+        self.new_rect = self.surf.get_rect()
         self.rect = pygame.Rect(x * px, y * py, px, py)
         self.color = color.Color(r, g, b, 50)
 
@@ -316,21 +318,22 @@ class Game:
 
             self.draw()
 
-    def run(self):
+    def run(self, show_menus=True):
         while True:
             self.win_msg = WinMessage()
-            self.show_start_screen()
-            self.show_game_text()
+            if show_menus:
+                self.show_start_screen()
+                self.show_game_text()
             self.show_game()
             self.show_win_screen()
             for player in self.players:
                 player.randomize_position()
 
 
-def main():
+def main(show_menus=True):
     theme = cfg.themes[0]
     game = Game(width=cfg.board_size, height=cfg.board_size, theme=theme)
-    game.run()
+    game.run(show_menus=show_menus)
 
 
 if __name__ == '__main__':
