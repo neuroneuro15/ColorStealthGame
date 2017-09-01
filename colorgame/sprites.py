@@ -80,6 +80,7 @@ class Player(Tile):
 
     def __init__(self, *args, **kwargs):
         super(Player, self).__init__(*args, **kwargs)
+        self._found_other = False
 
     def bomb(self, board, target):
         """Changes colors of surrounding tiles, and returns true if target player is on one of the squares."""
@@ -89,9 +90,11 @@ class Player(Tile):
                 tile = board[xt, yt]
                 tile.randomize_color()
                 if target.xy == (xt, yt):
-                    return True
+                    self._found_other = True
             except KeyError:
                 pass
 
-        else:
-            return False
+        return None
+
+    def check_if_won(self):
+        return True if self._found_other else False

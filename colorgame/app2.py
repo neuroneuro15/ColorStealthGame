@@ -4,8 +4,12 @@ from . import cfg
 import itertools
 import random
 from .sprites import Tile, Player
+from .menus import WinMessage
+
 
 # Create Game Objects
+win_screen = WinMessage()
+
 player1 = Player(color=(255, 255, 255), x=random.randint(0, cfg.board_size), y=random.randint(0, cfg.board_size))
 player2 = Player(color=(0, 0, 0), x=random.randint(0, cfg.board_size), y=random.randint(0, cfg.board_size))
 
@@ -45,6 +49,12 @@ while True:
         elif event.type == QUIT:
             pygame.quit()
 
+
+    for num, player in enumerate([player1, player2]):
+        if player.check_if_won():
+            win_screen.winner = 'Player {}'.format(num + 1)
+            pygame.quit()
+
     # Draw the player to the screen
     screen.fill((0, 0, 0))
 
@@ -54,3 +64,5 @@ while True:
     player2.draw(screen)
 
     pygame.display.flip()
+
+
