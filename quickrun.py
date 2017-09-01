@@ -1,3 +1,3 @@
-from colorgame import app
+from colorgame import app2
 
-app.main(show_menus=False)
+app2.main(show_menus=False)

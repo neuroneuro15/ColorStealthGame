@@ -331,7 +331,7 @@ class Game:
 
 
 def main(show_menus=True):
-    theme = cfg.themes[0]
+    theme = cfg.themes
     game = Game(width=cfg.board_size, height=cfg.board_size, theme=theme)
     game.run(show_menus=show_menus)
 
