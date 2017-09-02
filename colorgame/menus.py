@@ -6,28 +6,31 @@ import sys
 
 class WinMessage:
 
-    continue_button = K_SPACE
-    exit = K_ESCAPE
-
     def __init__(self):
         pygame.font.init()
         self.font = pygame.font.SysFont('TimesNewRoman', 30)
+        self.text = """
+        Congratulations, {}! You Won!
+
+        To play again press the Space Button
+
+        If you want to exit the game, Press ESC
+        """
         self.winner = 'I do not know'
 
     def draw(self, screen):
-        """This is the function that gets called to actually display on the screen."""
-        #textsurface = self.myfont.render('Congratulations! You found each other!', False, (0, 0, 0))
-        text="Congratulations, {}! You Won! \n \nTo play again press the Space Button \n \nIf you want to exit the game, Press ESC".format(self.winner)
         screen.fill((75,166,193))
-        utils.blit_text(screen, text, (99,250), self.font)
+        utils.blit_text(screen, self.text.format(self.winner), (99,250), self.font)
+        pygame.display.flip()
 
     def run(self, screen):
+
         while True:
             self.draw(screen)
-            pygame.display.flip()
+
             for event in pygame.event.get():
                 if event.type == KEYUP:
-                    if event.key == self.continue_button:
+                    if event.key == K_SPACE:
                         return
 
                     if event.key == K_ESCAPE:
@@ -38,68 +41,85 @@ class WinMessage:
 
 class StartGame:
 
-    easy_mode=K_1
-    normal_mode=K_2
-    hard_mode=K_3
+    SET_DIFFICULTY = USEREVENT + 1
 
     def __init__(self):
         pygame.font.init()
         self.font = pygame.font.SysFont('TimesNewRoman', 25)
+        self.text = """
+        Welcome to the Game!
+
+        To start the game please press the following buttons
+
+        -To play an Easy Mode Press 1
+
+        -To Play a Normal Mode Press 2
+
+        -To Play a Hard Mode Press 3
+        """
 
     def draw(self, screen):
-        """This is the function that gets called to actually display on the screen."""
-        text = "Welcome to the Game! \n \nTo start the game please press the following buttons \n \n-To play an Easy Mode Press 1 \n \n-To Play a Normal Mode Press 2 \n \n-To Play a Hard Mode Press 3"
-        #textsurface = self.font.render("This is Start Screen \nPress the Space Button to start", False, (0, 0, 0))
         screen.fill((75,166,193))
-        utils.blit_text(screen, text, (99,150), self.font)
-        return
+        utils.blit_text(screen, self.text, (99,150), self.font)
+        pygame.display.flip()
+
+    def set_difficulty(self, ai_players, move_prob):
+        cfg.ai_players = ai_players
+        cfg.ai_move_probability = move_prob
 
     def run(self, screen):
         while True:
             self.draw(screen)
-            pygame.display.flip()
+
             for event in pygame.event.get():
                 if event.type == KEYUP:
-                    if event.key == self.easy_mode:
-                        cfg.ai_players = 3
-                        cfg.ai_move_probability = 1
-                        return
-                    if event.key == self.normal_mode:
-                        cfg.ai_players = 7
-                        cfg.ai_move_probability = 5
-                        return
-                    if event.key == self.hard_mode:
-                        cfg.ai_players = 15
-                        cfg.ai_move_probability = 10
-                        return
+                    if event.key == K_1:
+                        pygame.event.post(pygame.event.Event(self.SET_DIFFICULTY, callback=self.set_difficulty, args=(3, 1)))
+                    if event.key == K_2:
+                        pygame.event.post(pygame.event.Event(self.SET_DIFFICULTY, callback=self.set_difficulty, args=(7, 3)))
+                    if event.key == K_3:
+                        pygame.event.post(pygame.event.Event(self.SET_DIFFICULTY, callback=self.set_difficulty, args=(7, 5)))
                     if event.key == K_ESCAPE:
                         pygame.quit()
                         sys.exit()
+                if event.type == self.SET_DIFFICULTY:
+                    event.callback(*event.args)
+                    return
 
 
 class GameText:
 
-    continue_button = K_SPACE
-
     def __init__(self):
         pygame.font.init()
         self.font = pygame.font.SysFont('TimesNewRoman', 25)
+        self.text = """
+        How to Play the Game!?
+
+        -To move up - Press the Up or W Button
+
+        -To move down - Press the Down  or S Button
+
+        -To move left - Press the Left or A Button
+
+        -To move right - Press the Right or D Button
+
+         Ready to Start?
+         Let's Go! Press the Space Button!
+         """
 
     def draw(self, screen):
-        """This is the function that gets called to actually display on the screen."""
-        text = "How to Play the Game!? \n \n-To move up - Press the Up or W Button \n \n-To move down - Press the Down  or S Button \n \n-To move left - Press the Left or A Button \n \n-To move right - Press the Right or D Button \n \nReady to Start? \nLet's Go! Press the Space Button!"
         screen.fill((75,166,193))
-        utils.blit_text(screen, text, (30,30), self.font)
+        utils.blit_text(screen, self.text, (30,30), self.font)
+        pygame.display.flip()
 
     def run(self, screen):
         while True:
             self.draw(screen)
-            pygame.display.flip()
             for event in pygame.event.get():
                 if event.type==KEYUP:
-                    if event.key ==self.continue_button:
+                    if event.key == K_SPACE:
                         return
-                    if event.key==K_ESCAPE:
+                    if event.key == K_ESCAPE:
                         pygame.quit()
                         sys.exit()
 
