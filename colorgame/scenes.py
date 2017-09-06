@@ -9,7 +9,7 @@ from contextlib import contextmanager
 
 pygame.font.init()
 
-CONTINUE_EVENT = USEREVENT + 100
+CONTINUE_EVENT = USEREVENT + 1
 continue_event = pygame.event.Event(CONTINUE_EVENT)
 
 
@@ -38,6 +38,7 @@ class Scene:
         while True:
             # for loop through the event queue
             for event in pygame.event.get():
+                print(event.type, event)
 
                 if event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
@@ -163,7 +164,7 @@ class StartGame(Scene):
         print('Setting difficulty: ', ai_players, move_prob)
         cfg.ai_players = ai_players
         cfg.ai_move_probability = move_prob
-        pygame.event.post(continue_event)
+        pygame.event.post(pygame.event.Event(CONTINUE_EVENT))
 
 
 
@@ -189,7 +190,8 @@ class GameText(Scene):
          """
 
         self.keyboard_inputs = {
-            K_SPACE: (pygame.event.post, continue_event)
+            K_SPACE: (pygame.event.post, pygame.event.Event(CONTINUE_EVENT)
+)
         }
 
     def draw(self, screen):
