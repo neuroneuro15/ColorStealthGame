@@ -1,10 +1,5 @@
 import pygame
-from pygame.locals import *
-import itertools
-import random
-from sprites import Tile, Player
 import cfg
-import menus
 import scenes
 
 
@@ -14,16 +9,14 @@ def main():
     screen = pygame.display.set_mode(cfg.screen_resolution)
 
     while True:
-        win_screen = menus.WinMessage()
-        start_screen = menus.StartGame()
+        win_screen = scenes.WinMessage()
+        start_screen = scenes.StartGame()
         start_screen.run(screen)
-        instruction_screen = menus.GameText()
-        instruction_screen.run(screen)
+        # instruction_screen = scenes.GameText()
+        # instruction_screen.run(screen)
         game = scenes.GameScene()
         game.run(screen)
         win_screen.run(screen)
-
-
 
 
 if __name__ == '__main__':

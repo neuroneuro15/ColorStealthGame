@@ -6,15 +6,15 @@ import cfg
 
 class Tile(pygame.sprite.Sprite):
 
-    def __init__(self, color=(255, 255, 255), x=0, y=0, *args, **kwargs):
+    def __init__(self, color=(255, 255, 255), x=None, y=None, *args, **kwargs):
         super(Tile, self).__init__(*args, **kwargs)
         self.surf = pygame.Surface((cfg.screen_resolution[0] / cfg.board_size,
                                     cfg.screen_resolution[1] / cfg.board_size))
         self.rect = self.surf.get_rect()
         self.color = color
 
-        self.x = x
-        self.y = y
+        self.x = x if type(x) != type(None) else random.randint(0, cfg.board_size)
+        self.y = y if type(y) != type(None) else random.randint(0, cfg.board_size)
 
     @property
     def color(self):
